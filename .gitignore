@@ -1,0 +1,6 @@
+# Coisas de build
+bin/
+obj/
+
+# Coisas de submição
+comandos_loop.zip

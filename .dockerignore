@@ -1,0 +1,11 @@
+# Coisas do git
+.git
+.gitignore
+
+# Coisas de build
+bin/
+obj/
+
+# Coisas de informação
+README.md
+LICENSE
