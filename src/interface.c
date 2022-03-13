@@ -106,7 +106,14 @@ static void interface_direcao_player(player_t player) {
     printf("A direção que o player está olhando é P[%s]\n", seta);
 }
 
-void interface_digitar(mapa_t mapa, comandos_t comandos, player_t player) {
+/* Mostra o contador de tentativas */
+static void interface_tentativas(size_t tentativas) {
+    printf("|@----------- %s%ld° tentativa%s -----------@|\n", COR_MAGENTA, tentativas, ESTILO_RESETAR);
+}
+
+void interface_digitar(mapa_t mapa, comandos_t comandos, player_t player, size_t tentativas) {
+	system("clear||cls");
+	interface_tentativas(tentativas);
 	interface_tabuleiro(mapa);
 	interface_comandos(comandos);
 	interface_direcao_player(player);
@@ -114,6 +121,7 @@ void interface_digitar(mapa_t mapa, comandos_t comandos, player_t player) {
 }
 
 void interface_movimento(mapa_t mapa, comandos_t comandos, comandos_execucao_t comando, player_t player) {
+	system("clear||cls");
 	interface_tabuleiro(mapa);
 	interface_comandos(comandos);
 	interface_direcao_player(player);
@@ -121,33 +129,29 @@ void interface_movimento(mapa_t mapa, comandos_t comandos, comandos_execucao_t c
 }
 
 void interface_passou_fase(void) {
-    system("cls||clear");
+    system("clear||cls");
     printf("|@--------------- %sParabens, você passou de fase%s -----------------@|\n", COR_VERDE, ESTILO_RESETAR);
 	sleep(2);
-	system("cls||clear");
+	system("clear||cls");
 }
 
 void interface_fracasso(void) {
-    system("cls||clear");
+    system("clear||cls");
     printf("|@--------------- %sInfelizmente, você não passou de fase%s -----------------@|\n", COR_VERMELHO, ESTILO_RESETAR);
 	sleep(2);
-	system("cls||clear");
-}
-
-void interface_tentativas(int tentativas) {
-    printf("|@----------- %s%d° tentativa%s -----------@|\n", COR_MAGENTA, tentativas, ESTILO_RESETAR);
+	system("clear||cls");
 }
 
 void interface_perdeu(void) {
-	system("cls||clear");
+	system("clear||cls");
 	printf("|@------------- %sVoce perdeu o jogo%s -------------@|\n", COR_VERMELHO, ESTILO_RESETAR);
 	sleep(2);
-	system("cls||clear");
+	system("clear||cls");
 }
 
 void interface_ganhou(void) {
-	system("cls||clear");
+	system("clear||cls");
 	printf("|@------------- %sVoce ganhou o jogo%s -------------@|\n", COR_VERDE, ESTILO_RESETAR);
 	sleep(2);
-	system("cls||clear");	
+	system("clear||cls");	
 }

@@ -1,9 +1,9 @@
 FROM debian:latest
 MAINTAINER Luiz Felipe <luizfelipecastrovb@gmail.com>
 
-RUN apt-get -y -qq update
-RUN apt-get -y -qq upgrade
-RUN apt-get install -qq -y make gcc
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get install -y make gcc
 
 WORKDIR /app
 

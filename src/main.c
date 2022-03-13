@@ -26,8 +26,7 @@ _Bool fase_1(void) {
 
 		comandos_execucao_t comando;
 
-		interface_tentativas(tentativas);
-		interface_digitar(mapa, comandos, player);
+		interface_digitar(mapa, comandos, player, tentativas);
 		fgets(sequencia, BUFSIZ, stdin);
 
 		// Escreve a sequencia na fila
@@ -40,8 +39,6 @@ _Bool fase_1(void) {
 			player_andar_fila(&player, fila, &mapa, comandos);
 			fila_consultar(fila, &comando);
 			fila_remover(fila);
-
-			system("cls||clear");
 
 			interface_movimento(mapa, comandos, comando, player);
 		}

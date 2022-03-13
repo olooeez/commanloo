@@ -32,7 +32,7 @@ run: all
 	./$(NAME)
 
 docker:
-	docker build -t loop-commands .
+	docker build -t comandos-loop .
 
 submit: all
 	zip -jr comandos_loop.zip *
