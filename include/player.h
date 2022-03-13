@@ -22,8 +22,8 @@ typedef enum {
 // Objeto do player
 typedef struct {
     direcao_t direcao;
-    size_t linha_atual, coluna_atual;
-    size_t proxima_linha, proxima_coluna;
+    int linha_atual, coluna_atual;
+    int proxima_linha, proxima_coluna;
 } player_t;
 
 /* Função que inicia o player com alguns valores por padrão */
