@@ -1,0 +1,3 @@
+# Avisos que eu não quero receber do cppcheck
+missingIncludeSystem
+invalidPrintfArgType_uint

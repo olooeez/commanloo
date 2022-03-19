@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -O2 -std=c99 -g
+CFLAGS=-Wall -Wextra -O2 -std=c99 -pedantic -g
 
 OBJ=obj
 SRC=src
@@ -9,30 +9,44 @@ BIN=bin
 SRCS=$(wildcard $(SRC)/*.c)
 OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
-NAME=$(BIN)/loop_command
+DIR=$(notdir $(CURDIR))
+
+NAME=comandos_loop
 
 all: $(OBJ) $(BIN) $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@
+	@echo [CC CFLAGS $^ -o BIN] 
+	@$(CC) $(CFLAGS) $^ -o $(BIN)/$@
 
 $(OBJ)/%.o: $(SRC)/%.c
-	$(CC) $(CFLAGS) -I $(HDR) -c $< -o $@
+	@echo [CC CFLAGS -c $< -o $@]
+	@$(CC) $(CFLAGS) -I $(HDR) -c $< -o $@
 
 $(OBJ):
-	mkdir -p $@
+	@echo [MKDIR $@]
+	@mkdir -p $@
 
 $(BIN):
-	mkdir -p $@
+	@echo [MKDIR $@]
+	@mkdir -p $@
 
 clean:
-	rm -rf $(OBJ) $(BIN)
+	@echo [RM OBJS BIN]
+	@$(RM) -rf  $(OBJ) $(BIN)
 
 run: all
-	./$(NAME)
+	@echo [./BIN]
+	@./$(NAME)
 
 docker:
-	docker build -t comandos-loop .
+	@echo [DOCKER BUILD]
+	@docker build -t $(DIR) .
 
 submit: all
-	zip -jr comandos_loop.zip *
+	@echo [ZIP DIR]
+	@zip -qqr $(DIR).zip . -x ".git/*" "bin/*" "obj/*" ".gitignore" "LICENSE" "README.md"
+
+lint:
+	@echo [CPPCHECK]
+	@cppcheck -I include --enable=all --std=c99 --suppressions-list=.cppcheck-suppress --platform=win64 --platform=unix64 $(SRC)
