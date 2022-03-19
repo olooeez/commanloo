@@ -15,16 +15,28 @@
 #define OBSTACULO_POSSIVEIS_DIRECOES 2
 
 // Definição de todos os possíveis tabuleiros
+
+// TODO: Adicionar novos mapas e remover esse
 tabuleiro_t tabuleiros[][TABULEIRO_LINHAS][TABULEIRO_COLUNAS] = {
 	{
 		{PLA, PAT, PAT, PAT, PAT, PAT, PAT, PAT},
-		{PAT, OBS, PAT, PAT, PAT, PAT, PAT, PAT},
-		{PAT, OBS, PAT, OBS, OBS, PAT, PAT, OBS},
-		{PAT, PAT, PAT, PAT, PAT, PAT, PAT, OBS},
 		{PAT, PAT, PAT, PAT, PAT, PAT, PAT, PAT},
-		{PAT, PAT, PAT, PAT, OBS, OBS, OBS, PAT},
-		{OBS, PAT, PAT, PAT, PAT, PAT, PAT, PAT},
-		{OBS, PAT, PAT, OBS, OBS, PAT, PAT, OBJ}
+		{OBS, OBS, PAT, OBS, OBS, PAT, PAT, OBS},
+		{PAT, PAT, PAT, PAT, PAT, PAT, PAT, OBS},
+		{PAT, OBS, PAT, PAT, PAT, PAT, OBS, PAT},
+		{PAT, OBS, PAT, OBS, OBS, PAT, OBS, PAT},
+		{PAT, PAT, PAT, PAT, PAT, PAT, PAT, PAT},
+		{PAT, PAT, PAT, OBS, OBS, PAT, PAT, OBJ}
+	},
+	{
+		{PLA, PAT, PAT, PAT, PAT, PAT, PAT, PAT},
+		{PAT, PAT, PAT, PAT, PAT, OBS, PAT, PAT},
+		{PAT, PAT, PAT, PAT, PAT, OBS, PAT, PAT},
+		{PAT, PAT, OBS, OBS, PAT, OBS, PAT, PAT},
+		{PAT, PAT, PAT, PAT, PAT, PAT, PAT, PAT},
+		{PAT, PAT, PAT, PAT, OBS, OBS, PAT, PAT},
+		{PAT, OBS, OBS, PAT, PAT, PAT, PAT, PAT},
+		{PAT, PAT, PAT, PAT, PAT, PAT, PAT, OBJ}
 	}
 };
 
@@ -46,4 +58,33 @@ mapa_t mapa_iniciar(void) {
 	}
 
 	return mapa;
+}
+
+void mapa_mostrar_tabuleiro(mapa_t mapa) {
+	size_t i, j;
+
+	printf("\n|@--------- %sTabuleiro%s ---------@|\n", COR_VERMELHO, ESTILO_RESETAR);
+	for (i = 0; i < TABULEIRO_LINHAS; i++) {
+		puts("|---|---|---|---|---|---|---|---|"); // Separador
+
+		for (j = 0; j < TABULEIRO_COLUNAS; j++) {
+			switch (mapa.tabuleiro[i][j]) {
+			case PLA:
+				printf("| %sP%s ", COR_MAGENTA, ESTILO_RESETAR);
+				break;
+			case OBJ:
+				printf("| %sO%s ", COR_VERDE, ESTILO_RESETAR);
+				break;
+			case OBS:
+				printf("| %sX%s ", COR_VERMELHO, ESTILO_RESETAR);
+				break;
+			case PAT:
+				printf("|   ");
+			}
+		}
+
+		printf("|\n"); // Fechar as ações
+	}
+
+	puts("|---|---|---|---|---|---|---|---|"); // Fechar o tabuleiro
 }

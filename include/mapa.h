@@ -21,4 +21,7 @@ typedef struct {
 /* Inicia o map com objetos aleatorios */
 mapa_t mapa_iniciar(void);
 
+/* Mostra o tabuleiro formatado para o stdout */
+void mapa_mostrar_tabuleiro(mapa_t mapa);
+
 #endif

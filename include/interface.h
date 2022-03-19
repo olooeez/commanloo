@@ -12,7 +12,7 @@ void interface_digitar(mapa_t mapa, comandos_t comandos, player_t player, size_t
 void interface_movimento(mapa_t mapa, comandos_t comandos, comandos_execucao_t comando, player_t player);
 
 /* Mostra uma menssagem de que não passou de fase */
-void interface_fracasso(void);
+void interface_nao_passou_fase(void);
 
 /* Mostra uma menssagem de que se passou de fase */
 void interface_passou_fase(void);

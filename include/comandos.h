@@ -30,9 +30,15 @@ typedef struct {
 comandos_t comandos_iniciar(void);
 
 /* Recebe uma sequencia de comandos do stdin, os formata e remove eles */
-void comando_formatar_remover(char *sequencia, comandos_execucao_t *comandos_execucao);
+void comandos_formatar_remover(char *sequencia, comandos_execucao_t *comandos_execucao);
 
-/* Atrapalha todos os comandos */
-void comando_atrapalha(acoes_t comandos[COMANDOS_MAXIMO][COMANDO_ACAO_MAXIMO]);
+/* Mostra os comandos formatado para o stdout */
+void comandos_interface_comandos(comandos_t comandos);
+
+/* Mostra os dados do comando para o stdout */
+void comandos_interface_dados_comando(comandos_execucao_t comando);
+
+/* Mostra a informação na hora de por a sequncia de comandos */
+void comandos_interface_sequencia(void);
 
 #endif
