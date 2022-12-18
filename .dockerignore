@@ -1,11 +1,11 @@
-# Coisas do git
+# Git stuff
 .git
 .gitignore
 
-# Coisas de build
+# Build stuff
 bin/
 obj/
 
-# Coisas de informação
+# Information stuff
 README.md
 LICENSE

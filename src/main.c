@@ -3,23 +3,23 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "fases.h"
+#include "phases.h"
 #include "interface.h"
 
 int main(void) {
 	size_t i;
-	fases_t fases[FASES_QUANTIDADE];
+	phases_t phases[PHASES_QUANTITY];
 	
-	fases_iniciar(fases);
+	init_phase(phases);
 
-	for (i = 0; i < FASES_QUANTIDADE; i++) {
-		fases_mostrar_dados(fases[i]);
+	for (i = 0; i < PHASES_QUANTITY; i++) {
+		draw_phase_data(phases[i]);
 
-		if (!fases[i].func()) {
-			interface_perdeu();
+		if (!phases[i].func()) {
+			draw_lost();
 		}
 	}
 
-	interface_ganhou();
+	draw_won();
 	return 0;
 }

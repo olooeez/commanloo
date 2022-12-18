@@ -3,37 +3,35 @@
 #include <stdlib.h>
 
 #include "player.h"
-#include "estilo.h"
+#include "style.h"
 
-// Regras do player e do tabuleiro
-#define PLAYER_INICIO_LINHA 0
-#define PLAYER_INICIO_COLUNA 0
+#define PLAYER_START_LINE 0
+#define PLAYER_START_COLUMN 0
 
-#define OBJETIVO_LINHA 7
-#define OBJETIVO_COLUNA 7
+#define OBJECTIVE_LINE 7
+#define OBJECTIVE_COLUMN 7
 
-/* Função privada para mudar a direção e a posição do player */
-static void player_atualizar(player_t *player, acoes_t direcao) {
-	switch (direcao) {
+static void player_update(player_t *player, action_t direction) {
+	switch (direction) {
 	case D:
-		if (player->direcao == ESQUERDA) player->direcao = CIMA;
-		else if (player->direcao == DIREITA) player->direcao = BAIXO;
-		else if (player->direcao == CIMA) player->direcao = DIREITA;
-		else if (player->direcao == BAIXO) player->direcao = ESQUERDA;
+		if (player->direction == LEFT) player->direction = UP;
+		else if (player->direction == RIGHT) player->direction = DOWN;
+		else if (player->direction == UP) player->direction = RIGHT;
+		else if (player->direction == DOWN) player->direction = LEFT;
 
 		break;
 	case E:
-		if (player->direcao == ESQUERDA) player->direcao = BAIXO;
-		else if (player->direcao == DIREITA) player->direcao = CIMA;
-		else if (player->direcao == CIMA) player->direcao = ESQUERDA;
-		else if (player->direcao == BAIXO) player->direcao = DIREITA;
+		if (player->direction == LEFT) player->direction = DOWN;
+		else if (player->direction == RIGHT) player->direction = UP;
+		else if (player->direction == UP) player->direction = LEFT;
+		else if (player->direction == DOWN) player->direction = RIGHT;
 
 		break;
 	case F:
-		if (player->direcao == CIMA) player->proxima_linha--;
-		else if (player->direcao == BAIXO) player->proxima_linha++;
-		else if (player->direcao == ESQUERDA) player->proxima_coluna--;
-		else if (player->direcao == DIREITA) player->proxima_coluna++;
+		if (player->direction == UP) player->next_line--;
+		else if (player->direction == DOWN) player->next_line++;
+		else if (player->direction == LEFT) player->next_column--;
+		else if (player->direction == RIGHT) player->next_column++;
 
 		break;
 	case N:
@@ -41,93 +39,92 @@ static void player_atualizar(player_t *player, acoes_t direcao) {
 	}
 }
 
-/* Move o player uma casa */
-static void player_mover(player_t *player, mapa_t *mapa) {
-	if (mapa->tabuleiro[player->proxima_linha][player->proxima_coluna] == OBS) {
-		player->proxima_linha = player->linha_atual;
-		player->proxima_coluna = player->coluna_atual;
+static void player_move(player_t *player, map_t *mapa) {
+	if (mapa->board[player->next_line][player->next_column] == OBS) {
+		player->next_line = player->current_line;
+		player->next_column = player->current_column;
 	}
 
-	if (player->proxima_linha >= TABULEIRO_LINHAS) {
-		player->proxima_linha = TABULEIRO_LINHAS - 1;
-	} else if (player->proxima_linha < 0) {
-		player->proxima_linha = 0;
+	if (player->next_line >= BOARD_ROWS) {
+		player->next_line = BOARD_ROWS - 1;
+	} else if (player->next_line < 0) {
+		player->next_line = 0;
 	}
 
-	if (player->proxima_coluna >= TABULEIRO_COLUNAS) {
-		player->proxima_coluna = TABULEIRO_COLUNAS - 1;
-	} else if (player->proxima_coluna < 0) {
-		player->proxima_coluna = 0;
+	if (player->next_column >= BOARD_COLUMNS) {
+		player->next_column = BOARD_COLUMNS - 1;
+	} else if (player->next_column < 0) {
+		player->next_column = 0;
 	}
 
-	mapa->tabuleiro[player->linha_atual][player->coluna_atual] = PAT;
-	mapa->tabuleiro[player->proxima_linha][player->proxima_coluna] = PLA;
+	mapa->board[player->current_line][player->current_column] = PAT;
+	mapa->board[player->next_line][player->next_column] = PLA;
 
-	player->linha_atual = player->proxima_linha;
-	player->coluna_atual = player->proxima_coluna;
+	player->current_line = player->next_line;
+	player->current_column = player->next_column;
 }
 
-player_t player_iniciar(void) {
+player_t init_player(void) {
 	player_t player;
 
-	player.coluna_atual = PLAYER_INICIO_COLUNA;
-	player.linha_atual = PLAYER_INICIO_LINHA;
-	player.direcao = DIREITA;
+	player.current_column = PLAYER_START_COLUMN;
+	player.current_line = PLAYER_START_LINE;
+	player.direction = RIGHT;
 
 	return player;
 }
 
-_Bool player_chegou_objetivo(player_t player) {
-	if (player.linha_atual >= OBJETIVO_LINHA && player.coluna_atual >= OBJETIVO_COLUNA) {
+bool player_reached_goal(player_t player) {
+	if (player.current_line >= OBJECTIVE_LINE && player.current_column >= OBJECTIVE_COLUMN) {
 		return 1;
 	}
 
 	return 0;
 }
 
-_Bool player_chegou_inicio(player_t player) {
-	if (player.linha_atual == PLAYER_INICIO_LINHA && player.coluna_atual == PLAYER_INICIO_COLUNA) {
+bool player_arrived_start(player_t player) {
+	if (player.current_line == PLAYER_START_LINE && player.current_column == PLAYER_START_COLUMN) {
 		return 1;
 	}
 
 	return 0;
 }
 
-void player_andar(player_t *player, comandos_execucao_t comando, mapa_t *mapa, comandos_t comandos) {
+void move_player(player_t *player, execution_commands_t command, map_t *map, commands_t commands) {
 	size_t i, j;
 
-	player->proxima_linha = player->linha_atual;
-	player->proxima_coluna = player->coluna_atual;
+	player->next_line = player->current_line;
+	player->next_column = player->current_column;
 
-	acoes_t acao;
+	action_t action;
 
-	for (i = 0; i < comando.acao_vezes; i++) {
-		for (j = 0; j < COMANDO_ACAO_MAXIMO; j++) {
-			acao = comandos.acoes[comando.acao_index-1][j];
+	for (i = 0; i < command.times; i++) {
+		for (j = 0; j < COMMAND_ACTION_MAXIMUM; j++) {
+			action = commands.actions[command.index-1][j];
 
-			player_atualizar(player, acao);
-			player_mover(player, mapa);
+			player_update(player, action);
+			player_move(player, map);
 		}
 	}
 }
 
-void player_mostrar_direcao(player_t player) {
-	char direcao_arte[] = "▼";
+void draw_player_direction(player_t player) {
+	char direction_art[] = "▼";
 
-	switch (player.direcao) {
-	case DIREITA:
-		strcpy(direcao_arte, "▶");
+	switch (player.direction) {
+	case RIGHT:
+		strcpy(direction_art, "▶");
 		break;
-	case ESQUERDA:
-		strcpy(direcao_arte, "◀");
+	case LEFT:
+		strcpy(direction_art, "◀");
 		break;
-	case CIMA:
-		strcpy(direcao_arte, "▲");
+	case UP:
+		strcpy(direction_art, "▲");
 		break;
-	case BAIXO:
+	case DOWN:
 		break;
 	}
 
-	printf("\n|@-------------- %sDirecao%s --------------@|\n", COR_AMARELO, ESTILO_RESETAR);
-	printf("O player esta com a direcao para P[%s]\n", direcao_arte);
+	printf("\n|@-------------- %sDirecao%s --------------@|\n", YELLOW, RESET);
+	printf("O player esta com a direcao para P[%s]\n", direction_art);
 }

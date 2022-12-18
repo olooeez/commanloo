@@ -1,44 +1,34 @@
 #ifndef INCLUDE_PLAYER_H
 #define INCLUDE_PLAYER_H
 
-#include "mapa.h"
-#include "fila.h"
-#include "pilha.h"
+#include <stdbool.h>
 
-// Direções que o player pode tomar
+#include "map.h"
+#include "queue.h"
+#include "heap.h"
+
 typedef enum {
-	ESQUERDA,
-	DIREITA,
-	CIMA,
-	BAIXO,
-} direcao_t;
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN,
+} direction_t;
 
-// Erros comuns durante o movimento do jogador
 typedef enum {
 	PLAYER_OK,
-	PLAYER_ATINGIU_OBJETIVO,
+	PLAYER_ACHIEVED_OBJECTIVE,
 } player_err;
 
-// Objeto do player
 typedef struct {
-	direcao_t direcao;
-	int linha_atual, coluna_atual;
-	int proxima_linha, proxima_coluna;
+	direction_t direction;
+	int current_line, current_column;
+	int next_line, next_column;
 } player_t;
 
-/* Inicia o player com alguns valores por padrão */
-player_t player_iniciar(void);
-
-/* Diz se o player chegou no objetivo */
-_Bool player_chegou_objetivo(player_t player);
-
-/* Diz se o player chegou no inicio */
-_Bool player_chegou_inicio(player_t player);
-
-/* Fazer o player andar com primerio item a fila */
-void player_andar(player_t *player, comandos_execucao_t comando, mapa_t *mapa, comandos_t comandos);
-
-/* Mostra a direção do player */
-void player_mostrar_direcao(player_t player);
+player_t init_player(void);
+bool player_reached_goal(player_t player);
+bool player_arrived_start(player_t player);
+void move_player(player_t *player, execution_commands_t command, map_t *map, commands_t commands);
+void draw_player_direction(player_t player);
 
 #endif
