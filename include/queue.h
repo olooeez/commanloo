@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "commands.h"
+#include "node.h"
 
 typedef enum {
 	QUEUE_OK,
@@ -11,7 +11,11 @@ typedef enum {
 	QUEUE_EMPTY,
 } queue_err;
 
-typedef struct queue_s queue_t;
+typedef struct queue_s {
+	node_t *begin;
+	node_t *end;
+	int quantity;
+} queue_t;
 
 queue_t *init_queue(void);
 void end_queue(queue_t *queue);

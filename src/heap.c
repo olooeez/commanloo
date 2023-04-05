@@ -3,17 +3,6 @@
 
 #include "heap.h"
 
-typedef struct node_s {
-	execution_commands_t data;
-	struct node_s *next;
-} node_t;
-
-struct heap_s {
-	node_t *begin;
-	node_t *end;
-	int quantity;
-};
-
 heap_t *init_heap(void) {
 	heap_t *heap = (heap_t *) malloc(sizeof(heap_t));
 

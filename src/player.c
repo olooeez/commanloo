@@ -3,24 +3,17 @@
 #include <stdlib.h>
 
 #include "player.h"
-#include "style.h"
-
-#define PLAYER_START_LINE 0
-#define PLAYER_START_COLUMN 0
-
-#define OBJECTIVE_LINE 7
-#define OBJECTIVE_COLUMN 7
 
 static void player_update(player_t *player, action_t direction) {
 	switch (direction) {
-	case D:
+	case R:
 		if (player->direction == LEFT) player->direction = UP;
 		else if (player->direction == RIGHT) player->direction = DOWN;
 		else if (player->direction == UP) player->direction = RIGHT;
 		else if (player->direction == DOWN) player->direction = LEFT;
 
 		break;
-	case E:
+	case L:
 		if (player->direction == LEFT) player->direction = DOWN;
 		else if (player->direction == RIGHT) player->direction = UP;
 		else if (player->direction == UP) player->direction = LEFT;
@@ -125,6 +118,5 @@ void draw_player_direction(player_t player) {
 		break;
 	}
 
-	printf("\n|@-------------- %sDirecao%s --------------@|\n", YELLOW, RESET);
-	printf("O player esta com a direcao para P[%s]\n", direction_art);
+	printf("> The player is headed to %s\n", direction_art);
 }

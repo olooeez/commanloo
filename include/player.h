@@ -7,6 +7,12 @@
 #include "queue.h"
 #include "heap.h"
 
+#define PLAYER_START_LINE 0
+#define PLAYER_START_COLUMN 0
+
+#define OBJECTIVE_LINE 7
+#define OBJECTIVE_COLUMN 7
+
 typedef enum {
 	LEFT,
 	RIGHT,

@@ -5,31 +5,30 @@
 #include <time.h>
 
 #include "commands.h"
-#include "style.h"
 
 action_t actions[][COMMANDS_MAXIMUM][COMMAND_ACTION_MAXIMUM] = {
 	{
 		{F, F, F},
-		{E, F},
-		{D, F},
-		{F, E}
+		{L, F},
+		{R, F},
+		{F, L}
 	},
 	{
 		{F, F, F, F},
-		{E, D, F},
-		{F, D},
-		{E, F},
+		{L, R, F},
+		{F, R},
+		{L, F},
 	},
 	{
-		{F, D},
-		{D, F},
-		{F, F, E, D},
+		{F, R},
+		{R, F},
+		{F, F, L, R},
 	},
 	{
-		{F, F, D},
-		{F, F, E},
-		{D, E, F},
-		{E, D, F},
+		{F, F, R},
+		{F, F, L},
+		{R, L, F},
+		{L, R, F},
 	}
 };
 
@@ -63,7 +62,7 @@ void store_input(char *sequence, execution_commands_t *commands) {
 	}
 
 	commands->index= sequence[0] - '0';
-	commands->index = sequence[2] - '0';
+	commands->times = sequence[2] - '0';
 
 	if (sequence_size == info_size) {
 		strcpy(sequence, "");
@@ -77,7 +76,7 @@ void store_input(char *sequence, execution_commands_t *commands) {
 }
 
 void draw_commands(commands_t commands) {
-	printf("\n|@---- %sComandos%s ----@|\n", BLUE, RESET);
+	puts("> List of commands:");
 
 	for (int i = 0; i < COMMANDS_MAXIMUM; i++) {
 		puts("|--------------------|");
@@ -87,13 +86,13 @@ void draw_commands(commands_t commands) {
 		for (int j = 0; j < COMMAND_ACTION_MAXIMUM; j++) {
 			switch(commands.actions[i][j]) {
 			case F:
-				printf("| %sF%s ", GREEN, RESET);
+				printf("| F ");
 				break;
-			case E:
-				printf("| %sE%s ", BLUE, RESET);
+			case L:
+				printf("| E ");
 				break;
-			case D:
-				printf("| %sD%s ", YELLOW, RESET);
+			case R:
+				printf("| D ");
 				break;
 			case N:
 				continue;
@@ -107,17 +106,12 @@ void draw_commands(commands_t commands) {
 }
 
 void draw_command_info(execution_commands_t command) {
-	printf("\n|@------------- %sInformações do movimento%s -------------@|\n", CYAN, RESET);
-	printf("%s|@----->%s Comandos: %lu\n", GREEN, RESET, command.index);
-	printf("%s|@----->%s Numero de vezes executado: %lu\n", YELLOW, RESET, command.times);
-	puts("Aperte a tecla enter para continar...");
-	getc(stdin);
+	puts("> Movement information:");
+	printf("> Command: %ld\n", command.index);
+	printf("> Times: %ld\n", command.times);
 }
 
 void draw_input_info(void) {
-	printf("\n|@---------------------- %sSequencia%s ----------------------@|\n", GREEN, RESET);
-	puts("Deve ser escrito no modelo: numero_comando-vezes_executado");
-	puts("Exemplo: 1-2 3-1 1-1 ...");
-	puts("OBS: A sequencia nao pode ter espacos no inico ou final, somente para separ os comandos");
-	printf("\nDigite a sequencia de comandos: ");
+	puts("> It should be written in the model: number_command-times_executed");
+	printf("• Enter the command sequence (e.g 1-2 3-1 1-1): ");
 }

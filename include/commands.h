@@ -8,8 +8,8 @@
 
 typedef enum {
 	N,
-	E,
-	D,
+	L,
+	R,
 	F,
 } action_t;
 

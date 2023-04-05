@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "commands.h"
+#include "node.h"
 
 typedef enum {
 	HEAP_OK,
@@ -11,7 +11,11 @@ typedef enum {
 	HEAP_EMPTY,
 } heap_err;
 
-typedef struct heap_s heap_t;
+typedef struct heap_s {
+	node_t *begin;
+	node_t *end;
+	int quantity;
+} heap_t;
 
 heap_t *init_heap(void);
 void end_heap(heap_t *heap);

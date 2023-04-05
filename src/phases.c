@@ -4,7 +4,7 @@
 
 #include "commands.h"
 #include "map.h"
-#include "style.h"
+
 #include "queue.h"
 #include "heap.h"
 #include "player.h"
@@ -33,10 +33,11 @@ static bool phase_1(void) {
 		queue_t *queue = init_queue();
 
 		draw_type_scene(map, commands, player, trys);
-		fgets(sequence, BUFSIZ, stdin);
+		(void) *fgets(sequence, BUFSIZ, stdin);
 
 		while (strlen(sequence) != 0) {
 			store_input(sequence, &command);
+			printf("%ld, %ld\n", command.index, command.times);
 			insert_queue(queue, command);
 		}
 
@@ -86,7 +87,7 @@ static bool phase_2(void) {
 		heap_t *heap = init_heap();
 
 		draw_type_scene(map, commands, player, trys);
-		fgets(sequence, BUFSIZ, stdin);
+		(void) *fgets(sequence, BUFSIZ, stdin);
 
 		while (strlen(sequence) != 0) {
 			store_input(sequence, &command);
@@ -141,7 +142,7 @@ static bool phase_3(void) {
 		queue_t *in = init_queue();
 
 		draw_type_scene(map, commands, player, trys);
-		fgets(sequence, BUFSIZ, stdin);
+		(void) *fgets(sequence, BUFSIZ, stdin);
 
 		while (strlen(sequence) != 0) {
 			store_input(sequence, &command);
@@ -168,7 +169,7 @@ static bool phase_3(void) {
 				commands = init_commands();
 
 				draw_type_scene(map, commands, player, trys);
-				fgets(sequence, BUFSIZ, stdin);
+				(void) *fgets(sequence, BUFSIZ, stdin);
 
 				while (strlen(sequence) != 0) {
 					store_input(sequence, &command);
@@ -209,9 +210,9 @@ static bool phase_3(void) {
 }
 
 static phases_t defined_phases[PHASES_QUANTITY] = {
-	{phase_1, "Primeira fase [Usando filas]", "Chegue ao objetivo (O) usando fila"},
-	{phase_2, "Segunda fase [Usando pilhas]", "Chegue ao objetivo (O) usando pilha"},
-	{phase_3, "Terceira fase [Usando filas/pilhas]", "Chegue ao objetivo (O) usando fila e volte ao inicio usando pilha"},
+	{phase_1, "First phase (using queues)", "Get to the objective (O) using queue"},
+	{phase_2, "Second phase (using heaps)", "Get to the objective (O) using heaps"},
+	{phase_3, "Third phase (Using queues/heaps)", "Get to the objective (O) using queue and go back to the beginning using the heap"},
 };
 
 void init_phase(phases_t *phase) {
@@ -223,10 +224,6 @@ void init_phase(phases_t *phase) {
 }
 
 void draw_phase_data(phases_t phase) {
-	system("clear||cls");
-	printf("|@----------- %s%s%s -----------@|\n", RED, phase.name, RESET);
-	printf("\n|@---> Missao: %s\n", phase.info);
-	puts("|@---> Aperte a tecla enter para continuar...");
-	getc(stdin);
-	system("clear||cls");
+	printf("> %s\n", phase.name);
+	printf("> Mission: %s\n", phase.info);
 }

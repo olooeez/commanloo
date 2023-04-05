@@ -3,17 +3,6 @@
 
 #include "queue.h"
 
-typedef struct node_s {
-	execution_commands_t data;
-	struct node_s *next;
-} node_t;
-
-struct queue_s {
-	node_t *begin;
-	node_t *end;
-	int quantity;
-};
-
 queue_t *init_queue(void) {
 	queue_t *queue = (queue_t *) malloc(sizeof(queue_t));
 
