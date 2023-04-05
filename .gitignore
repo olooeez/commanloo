@@ -1,6 +1,11 @@
-# Build stuff
-bin/
-obj/
+# Objects folder
+obj
 
-# Submission stuff
-comandos-loop.zip
+# Binary folder
+bin
+
+# Binary folder under test folder
+test/bin
+
+# Coverage file
+coverage.xml
