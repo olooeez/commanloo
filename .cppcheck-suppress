@@ -1,3 +1,0 @@
-# Warnings I don't want to receive from cppcheck
-missingIncludeSystem
-invalidPrintfArgType_uint
