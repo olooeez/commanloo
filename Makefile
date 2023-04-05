@@ -1,43 +1,69 @@
-CC=gcc
-CFLAGS=-Wall -Wextra -O2 -std=c99 -pedantic -g
+CC = gcc
+CFLAGS = -Wall -Wextra -O2 -std=c99 -pedantic -fprofile-arcs -ftest-coverage
 
-OBJ=obj
-SRC=src
-HDR=include
-BIN=bin
+HDR = include
+BIN = bin
+SRC = src
+OBJ = obj
+TEST = test
 
-SRCS=$(wildcard $(SRC)/*.c)
-OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+SRCS := $(wildcard $(SRC)/*.c)
+OBJS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
-DIR=$(notdir $(CURDIR))
+TEST_SRCS := $(wildcard $(TEST)/*.c)
+TEST_BINS := $(patsubst $(TEST)/%.c, $(TEST)/bin/%, $(TEST_SRCS))
 
-NAME=commanloo
+NAME = commanloo
+VERSION = 0.1.0
 
-all: $(OBJ) $(BIN) $(NAME)
+.PHONY: all clean test lint docker submit coverage
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $(BIN)/$@
+all: $(OBJ) $(BIN) $(BIN)/$(NAME)
 
-$(OBJ)/%.o: $(SRC)/%.c
-	$(CC) $(CFLAGS) -I $(HDR) -c $< -o $@
+$(BIN)/$(NAME): main.c $(OBJS)
+	@echo "> Generating the executable in $@."
+	@$(CC) $(CFLAGS) -I $(HDR) $^ -o $@
 
 $(OBJ):
-	mkdir -p $@
+	@echo "> Creating $@ directory."
+	@mkdir -p $@
 
 $(BIN):
-	mkdir -p $@
+	@echo "> Creating $@ directory."
+	@mkdir -p $@
+
+$(OBJ)/%.o: $(SRC)/%.c
+	@echo "> Generating $@ from $<."
+	@$(CC) $(CFLAGS) -I $(HDR) -c $< -o $@
+
+$(TEST)/bin/%: $(TEST)/%.c $(OBJS)
+	@echo "> Generating $@ from $<."
+	@$(CC) $(CFLAGS) -I $(HDR) $< $(OBJS) -o $@ -lcriterion -lgcov
+
+$(TEST)/bin:
+	@echo "> Creating $@ directory."
+	@mkdir -p $@
+
+check: $(TEST)/bin $(TEST_BINS)
+	@for test in $(TEST_BINS); do echo "> Running test from $$test."; ./$$test; done
+
+coverage: $(TEST)/bin $(TEST_BINS)
+	@echo "> Generating code coverage report."
+	@rm -f *.gcno *.gcda *.gcov
+	@for test in $(TEST_BINS); do echo "> Running test with coverage from $$test."; ./$$test; done
+	@echo "> Running gcovr to get the coverage."
+	@gcovr --xml-pretty --exclude-unreachable-branches --print-summary -o coverage.xml --root .
 
 clean:
-	$(RM) -rf  $(OBJ) $(BIN)
+	@echo "> Cleaning the project."
+	@$(RM) -rf $(OBJ) $(BIN) $(TEST)/bin *.gcno *.gcda *.gcov $(TEST)/*.gcov
 
 run: all
-	./$(NAME)
+	@echo "> Running the project in $(BIN)/$(NAME)."
+	@./$(BIN)/$(NAME)
 
-docker:
-	docker build -t $(DIR) .
-
-submit: all
-	zip -qqr $(DIR).zip . -x ".git/*" "bin/*" "obj/*" ".gitignore" "LICENSE" "README.md"
-
-lint:
-	cppcheck -I include --enable=all --std=c99 --suppressions-list=.cppcheck-suppress --platform=win64 --platform=unix64 $(SRC)
+registry:
+	@echo "> Building a docker image from version $(VERSION)."
+	@docker build -t registry.gitlab.com/olooeez/$(NAME):$(VERSION) .
+	@echo "> Pushing new docker image verison $(VERSION) to container registry."
+	@docker push registry.gitlab.com/olooeez/$(NAME):$(VERSION)
