@@ -1,18 +1,16 @@
-FROM debian:latest
+FROM debian:stable-slim
+
 MAINTAINER Luiz Felipe <luizfelipecastrovb@gmail.com>
 
 RUN apt-get -y update
-RUN apt-get -y upgrade
-RUN apt-get install -y make gcc
+RUN apt-get -y install make gcc libcriterion-dev gcovr
 
 WORKDIR /app
 
 RUN mkdir include src
 
-COPY ./include include/
-COPY ./src src/
-COPY ./Makefile /app/
+COPY . /app
 
 RUN make
 
-ENTRYPOINT ["./bin/loop_command"]
+ENTRYPOINT ["./bin/commanloo"]

@@ -1,11 +1,11 @@
-# Git stuff
-.git
-.gitignore
-
-# Build stuff
-bin/
-obj/
-
-# Information stuff
-README.md
+# License file
 LICENSE
+
+# Readme file
+README.md
+
+# Objects folder
+obj
+
+# Binary folder
+bin
